@@ -1,0 +1,68 @@
+from src.application.dto import ChatCreateDTO, ChatDTO, MessageDTO
+from src.domain.exceptions import ChatNotFound
+from src.domain.entities import Chat
+from src.domain.repositories import ChatRepository, MessageRepository
+
+
+class ChatService:
+    def __init__(
+        self,
+        chat_repository: ChatRepository,
+        message_repository: MessageRepository,
+    ) -> None:
+        self._chat_repository = chat_repository
+        self._message_repository = message_repository
+
+    async def create_chat(self, dto: ChatCreateDTO) -> ChatDTO:
+        chat = Chat(
+            id=0,  # временный, будет заменён БД
+            title=dto.title,
+            created_at=None,  # заполнит БД
+        )
+
+        created_chat = await self._chat_repository.create(chat)
+
+        return ChatDTO(
+            id=created_chat.id,
+            title=created_chat.title,
+            created_at=created_chat.created_at,
+        )
+
+    async def get_chat(self, chat_id: int, limit: int = 20) -> tuple[ChatDTO, list[MessageDTO]]:
+        if limit > 100:
+            limit = 100
+
+        chat = await self._chat_repository.get_by_id(chat_id)
+        
+        if chat is None:
+            raise ChatNotFound(f"Chat with id={chat_id} not found")
+
+        messages = await self._message_repository.get_last_by_chat(
+            chat_id=chat_id,
+            limit=limit,
+        )
+
+        return (
+            ChatDTO(
+                id=chat.id,
+                title=chat.title,
+                created_at=chat.created_at,
+            ),
+            [
+                MessageDTO(
+                    id=m.id,
+                    chat_id=m.chat_id,
+                    text=m.text,
+                    created_at=m.created_at,
+                )
+                for m in messages
+            ],
+        )
+
+    async def delete_chat(self, chat_id: int) -> None:
+        chat = await self._chat_repository.get_by_id(chat_id)
+        if chat is None:
+            raise ChatNotFound(f"Chat with id={chat_id} not found")
+
+        # сообщения удалятся каскадно
+        await self._chat_repository.delete(chat_id)
