@@ -23,10 +23,8 @@ class MessageService:
             raise ChatNotFound(f"Chat with id={chat_id} not found")
 
         message = Message(
-            id=0,  # временный
             chat_id=chat_id,
             text=dto.text,
-            created_at=None,  # заполнит БД
         )
 
         created_message = await self._message_repository.create(message)

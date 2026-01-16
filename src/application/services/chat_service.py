@@ -14,11 +14,7 @@ class ChatService:
         self._message_repository = message_repository
 
     async def create_chat(self, dto: ChatCreateDTO) -> ChatDTO:
-        chat = Chat(
-            id=0,  # временный, будет заменён БД
-            title=dto.title,
-            created_at=None,  # заполнит БД
-        )
+        chat = Chat(title=dto.title)
 
         created_chat = await self._chat_repository.create(chat)
 
@@ -28,12 +24,14 @@ class ChatService:
             created_at=created_chat.created_at,
         )
 
-    async def get_chat(self, chat_id: int, limit: int = 20) -> tuple[ChatDTO, list[MessageDTO]]:
-        if limit > 100:
-            limit = 100
+    async def get_chat(
+        self,
+        chat_id: int,
+        limit: int = 20,
+    ) -> tuple[ChatDTO, list[MessageDTO]]:
+        limit = min(limit, 100)
 
         chat = await self._chat_repository.get_by_id(chat_id)
-        
         if chat is None:
             raise ChatNotFound(f"Chat with id={chat_id} not found")
 
@@ -64,5 +62,4 @@ class ChatService:
         if chat is None:
             raise ChatNotFound(f"Chat with id={chat_id} not found")
 
-        # сообщения удалятся каскадно
         await self._chat_repository.delete(chat_id)
