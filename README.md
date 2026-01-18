@@ -19,3 +19,6 @@ docker compose exec web alembic upgrade head
 
 5. Открываем swagger и тестируем api
 http://localhost:8000/docs
+
+6. Для запуска тестов необходимо ввести команду
+docker compose exec web pytest src/tests -v
