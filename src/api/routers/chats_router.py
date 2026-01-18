@@ -1,13 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from src.api.dependencies import get_chat_service, get_message_service
-from src.application.dto import (
-    ChatCreateDTO,
-    ChatDTO,
-    MessageCreateDTO,
-    MessageDTO,
-)
-from src.application.services import ChatService, MessageService
+from src.application.dto.chat_dto import ChatCreateDTO, ChatDTO
+from src.application.dto.message_dto import MessageDTO, MessageCreateDTO
+from src.application.services.chat_service import ChatService
+from src.application.services.message_service import MessageService
 from src.domain.exceptions import ChatNotFound, ValidationError
 
 router = APIRouter(prefix="/chats", tags=["chats"])

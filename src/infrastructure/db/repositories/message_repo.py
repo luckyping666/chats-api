@@ -1,9 +1,9 @@
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.entities import Message
-from src.domain.repositories import MessageRepository
-from src.infrastructure.db.models import MessageModel
+from src.domain.entities.message import Message
+from src.domain.repositories.message_repo import MessageRepository
+from src.infrastructure.db.models.message_model import MessageModel
 
 
 class SqlAlchemyMessageRepository(MessageRepository):

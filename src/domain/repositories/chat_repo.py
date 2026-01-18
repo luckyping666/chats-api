@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from src.domain.entities import Chat
+from src.domain.entities.chat import Chat
 
 
 class ChatRepository(ABC):

@@ -1,9 +1,9 @@
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.entities import Chat
-from src.domain.repositories import ChatRepository
-from src.infrastructure.db.models import ChatModel
+from src.domain.entities.chat import Chat
+from src.domain.repositories.chat_repo import ChatRepository
+from src.infrastructure.db.models.chat_model import ChatModel
 
 
 class SqlAlchemyChatRepository(ChatRepository):

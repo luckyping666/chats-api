@@ -1,8 +1,9 @@
-from src.application.dto import ChatCreateDTO, ChatDTO, MessageDTO
+from src.application.dto.chat_dto import ChatCreateDTO, ChatDTO
+from src.application.dto.message_dto import MessageDTO
 from src.domain.exceptions import ChatNotFound
-from src.domain.entities import Chat
-from src.domain.repositories import ChatRepository, MessageRepository
-
+from src.domain.entities.chat import Chat
+from src.domain.repositories.chat_repo import ChatRepository
+from src.domain.repositories.message_repo import MessageRepository
 
 class ChatService:
     def __init__(

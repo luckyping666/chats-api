@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from src.domain.entities import Message
+from src.domain.entities.message import Message
 
 
 class MessageRepository(ABC):
